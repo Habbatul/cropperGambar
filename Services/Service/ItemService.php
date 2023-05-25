@@ -65,7 +65,7 @@ namespace Service {
             $this->itemRepository->updateByID($id, $gambar, $nama, $deskripsi, $jenis);
             echo "<script>alert('SUKSES MENGUBAH Item');window.location.href='index';</script>";
         }
-
+     
         function removeItem(int $number): void
         {
             if ($this->itemRepository->remove($number)) {

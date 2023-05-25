@@ -3,8 +3,8 @@ Options -Indexes
 RewriteEngine On 
 
 #arahkan link
-RewriteRule ^itemService$ Services/ViewLogic/itemService [L]
-RewriteRule ^jasaService$ Services/ViewLogic/jasaService [L] 
+RewriteRule ^itemService$ Services/ViewLogic/ItemView [L]
+RewriteRule ^jasaService$ Services/ViewLogic/JasaView [L] 
 
 RewriteRule ^$ View/index.php [L]
 #RewriteRule ^((?!View/).*)$ View/$1 [L,NC]

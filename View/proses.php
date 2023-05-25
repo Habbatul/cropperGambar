@@ -6,31 +6,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Pastikan tidak ada error saat mengunggah file
     if ($file['error'] === UPLOAD_ERR_OK) {
-      // Tentukan path penyimpanan akhir
-      $targetPath = '../ItemGambar/' . $file['name'];
+      // Menggunakan nama file untuk tujuan penyimpanan dan tampilan gambar yang dicrop
+      $fileName = $file['name'];
 
-      // Pindahkan file yang diunggah ke folder tujuan
-      if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-        // Berhasil memindahkan file yang diunggah
+      // Decode base64 data gambar yang telah dicrop
+      $croppedData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $croppedImageData));
 
-        // Decode base64 data gambar yang telah dicrop
-        $croppedData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $croppedImageData));
+      // Tentukan path untuk menyimpan gambar yang telah dicrop
+      $croppedImagePath = '../ItemGambar/' . $fileName;
 
-        // Tentukan path untuk menyimpan gambar yang telah dicrop
-        $croppedImagePath = '../ItemGambar/' . $file['name'];
+      // Simpan gambar yang telah dicrop
+      file_put_contents($croppedImagePath, $croppedData);
 
-        // Simpan gambar yang telah dicrop
-        file_put_contents($croppedImagePath, $croppedData);
+      // Berhasil mengunggah dan menyimpan gambar yang telah dicrop, lakukan operasi lain jika diperlukan
+      // ...
 
-        // Berhasil mengunggah dan menyimpan gambar yang telah dicrop, lakukan operasi lain jika diperlukan
-        // ...
-
-        // Redirect atau tampilkan pesan sukses
-        echo 'Gambar berhasil diunggah dan disimpan.';
-      } else {
-        // Gagal memindahkan file yang diunggah
-        echo 'Gagal memindahkan file yang diunggah.';
-      }
+      // Redirect atau tampilkan pesan sukses
+      echo 'Gambar berhasil diunggah dan disimpan.';
+      echo "<img src='ItemGambar/".$fileName."'>";
+      echo "<p>".$_POST['pesan']."</p>";
     } else {
       // Terjadi kesalahan saat mengunggah file
       echo 'Error: ' . $file['error'];
@@ -38,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } else {
     // Tidak ada file yang diunggah atau data gambar yang dicrop tidak tersedia
     echo 'Tidak ada file yang diunggah atau data gambar yang dicrop tidak tersedia.';
-    echo "<img src='ItemGambar/".$file['name']."'>";
   }
 }
 ?>

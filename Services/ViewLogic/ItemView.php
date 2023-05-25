@@ -62,13 +62,31 @@ if(isset($_POST['ubahItem']))
             unlink($fullPath);
         }
         
-        //laukan update pada seluruhnya
-        $gambar = $_FILES['gambar']['name'];
-        $tmp_file = $_FILES['gambar']['tmp_name'];
-        $path = "../../itemGambar/";
-        move_uploaded_file($tmp_file, $path.$gambar);
-        testChangeItem($_POST['id'], $gambar, $_POST['nama'],$_POST['deskripsi'], $_POST['jenis']);
+        //laukan update pada seluruhnya dan menerapkan cropper
+        if (isset($_FILES['gambar']['name']) && isset($_POST['croppedImageData'])) {
+            $gambar = $_FILES['gambar'];
+            $croppedImageData = $_POST['croppedImageData'];
+        
+        
+            if ($gambar['error'] === UPLOAD_ERR_OK) {
+              $fileName = $gambar['name'];
+              $croppedData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $croppedImageData));
+              $croppedImagePath = $path . $fileName;
+              file_put_contents($croppedImagePath, $croppedData);
+              echo "<script>alert('Gambar berhasil diunggah dan disimpan.');window.location.href='index';</script>";
+            } else {
+              echo "<script>alert('Error : " . $gambar['error'] . ");window.location.href='index';</script>";
+            }
+            } else {
+            echo "<script>alert('Tidak ada file yang diunggah atau data gambar yang dicrop tidak tersedia.');window.location.href='index';</script>";
+            }
+
+
+        //lakukan query
+        testChangeItem($_POST['id'], $gambar['name'], $_POST['nama'],$_POST['deskripsi'], $_POST['jenis']);
     }
+}else{
+    echo "tolol kau";
 }
 
 function SSPagination($dataPagination){

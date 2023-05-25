@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php 
-require_once __DIR__ . '/../Services/ViewLogic/itemService.php';
+require_once __DIR__ . '/../Services/ViewLogic/itemView.php';
 ?>
 <html lang="en">
 <head>
@@ -14,10 +14,18 @@ require_once __DIR__ . '/../Services/ViewLogic/itemService.php';
     <!-- bootstrap -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-	
+	<!-- cropper.js -->
 	<link rel="stylesheet" href="src/cropper.css">
-<script src="src/cropper.js"></script>
+	<script src="src/cropper.js"></script>
+
 	<style>
+			.cropper-container {
+			width: 100%;
+			max-width: 200px;
+			max-height: 200px;
+			margin: 0 auto;
+			}
+
         [x-cloak] {
 			display: none;
 		}
@@ -112,7 +120,7 @@ require_once __DIR__ . '/../Services/ViewLogic/itemService.php';
 <!-- tambah data -->
 
 				<!-- content -->
-				<form action="itemService" method="post" enctype="multipart/form-data">
+				<form id="uploadForm" action="itemService" method="post" enctype="multipart/form-data">
 				<div  class="text-center mt-4">
 					<!--nama-->
 					<ul>
@@ -122,8 +130,16 @@ require_once __DIR__ . '/../Services/ViewLogic/itemService.php';
 					<!--gambar-->
 					<ul>
 						<li><label class="text-lg font-bold text-blue-500">upload : </label> </li>
-						<li><Input class="text-lg font-bold text-blue-500" accept="image/jpeg, image/jpg, image/png" type="file" name="gambar"></li>
-
+    
+						<input type="hidden" id="croppedImageData" name="croppedImageData">
+						<li><input type="file" id="imageInput" name="gambar" accept="image/*" onchange="loadImage(event)" class="text-lg font-bold text-blue-500"></li>
+	
+						<!-- cropper Canvas -->
+						<div class="cropper-container">
+						<img id="image">
+						<canvas id="croppedCanvas"></canvas>
+						</div>
+  
 
 					</ul>
 					<!--deskripsi-->
@@ -144,7 +160,7 @@ require_once __DIR__ . '/../Services/ViewLogic/itemService.php';
 				<!--Footer-->
 				<div class="flex justify-end pt-2">
 					<button type="button" class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2" @click="alert(selectedValue);">Action</button>
-					<button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400" name="ubahItem">Ubah</button>
+					<button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400" value="ubahItem" name="ubahItem">Ubah</button>
 				</div>
 			</form>
 
@@ -156,9 +172,7 @@ require_once __DIR__ . '/../Services/ViewLogic/itemService.php';
 	</section>
 
 
-  <script>
-
-  </script>
+  <script src="js/cropping.js" defer></script>
 
 
 
