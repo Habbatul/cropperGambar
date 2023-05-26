@@ -18,7 +18,7 @@
           
           image.onload = function() {
             cropper = new Cropper(image, {
-              aspectRatio: 9 / 9
+              aspectRatio: 5 / 5
             });
           };
         };

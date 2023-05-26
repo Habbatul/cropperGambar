@@ -10,7 +10,7 @@ require_once __DIR__ . '/../Services/ViewLogic/itemView.php';
     <title>Document</title>
     <script src="node_modules/alpinejs/dist/cdn.js" defer></script>
 	<!-- tailwind -->
-    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.css" rel="stylesheet" />
     <!-- bootstrap -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -19,12 +19,22 @@ require_once __DIR__ . '/../Services/ViewLogic/itemView.php';
 	<script src="src/cropper.js"></script>
 
 	<style>
-			.cropper-container {
-			width: 100%;
-			max-width: 200px;
-			max-height: 200px;
-			margin: 0 auto;
-			}
+.cropper-container {
+  width: 100%;
+  max-width: 300px;
+  max-height: 300px;
+  min-width:300px;
+  min-height:300px;
+  margin: 0 auto;
+  position: relative;
+  display: grid;
+}
+
+.cropper-container img {
+  grid-area: 1/1;
+
+}
+
 
         [x-cloak] {
 			display: none;
@@ -100,12 +110,12 @@ require_once __DIR__ . '/../Services/ViewLogic/itemView.php';
 
 	</div>
 
-    <section class="flex flex-wrap p-4 h-full items-center">
-		<!--Overlay-->
-		<div class="overflow-auto" style="background-color: rgba(0,0,0,0.5);backdrop-filter: blur(5px);" x-show="showModal" :class="{ 'fixed backdrop-blur-sm inset-0 z-10 flex items-center justify-center': showModal }">
-			<!--Dialog-->
-			<div class="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg py-4 text-left px-6" x-show="showModal" @click.away="showModal = false" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100">
-
+	<section class="flex flex-wrap p-4 h-full">
+ <!--Overlay-->
+ <div class="fixed top-0 left-0 w-full h-full flex justify-center md:items-start items-center overflow-y-auto" style="background-color: rgba(0,0,0,0.5);backdrop-filter: blur(5px);" x-show="showModal">
+    <!--Dialog Wrapper-->
+    <div class="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg py-4 text-left px-6 my-10" x-show="showModal" @click.away="showModal = false" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100">
+     
 				<!--Title-->
 				<div class="flex justify-between items-center pb-3">
 					<p class="text-2xl font-bold">Ubah Data</p>
@@ -121,37 +131,37 @@ require_once __DIR__ . '/../Services/ViewLogic/itemView.php';
 
 				<!-- content -->
 				<form id="uploadForm" action="itemService" method="post" enctype="multipart/form-data">
-				<div  class="text-center mt-4">
+				<div  class="text-center mt-4 px-4">
 					<!--nama-->
-					<ul>
+					<ul class="px-0">
 						<li><label class="text-lg font-bold text-blue-500">nama barang : </label></li>
 						<li><input type="text" name="nama" class="font-mono p-2 border-2 border-blue-500 rounded-lg bg-gray-100 text-base focus:outline-none focus:border-green-500 focus:ring-green-500 "></li>
 					</ul>
 					<!--gambar-->
-					<ul>
+					<ul class="px-0">
 						<li><label class="text-lg font-bold text-blue-500">upload : </label> </li>
     
 						<input type="hidden" id="croppedImageData" name="croppedImageData">
 						<li><input type="file" id="imageInput" name="gambar" accept="image/*" onchange="loadImage(event)" class="text-lg font-bold text-blue-500"></li>
-	
+					</ul>
+					<ul class="px-0">
 						<!-- cropper Canvas -->
 						<div class="cropper-container">
 						<img id="image">
-						<canvas id="croppedCanvas"></canvas>
 						</div>
-  
+					</ul>
 
 					</ul>
 					<!--deskripsi-->
-					<ul>
+					<ul class="px-0">
 						<li><label class="text-lg font-bold text-blue-500">deskripsi : </label></li>
 						<li><input type="text" name="deskripsi" class="font-mono p-2 border-2 border-blue-500 rounded-lg bg-gray-100 text-base focus:outline-none focus:border-green-500 focus:ring-green-500 "></li>
 					</ul>
 					<!--jenis-->
-					<ul>
+					<ul class="px-0">
 						<li><label class="text-lg font-bold text-blue-500">jenis: </label></li>
 						<li><input type="text" name="jenis" class="font-mono p-2 border-2 border-blue-500 rounded-lg bg-gray-100 text-base focus:outline-none focus:border-green-500 focus:ring-green-500 "></li>
-					</ul>	
+					</ul class="px-0">	
 						<input type="hidden" name="id" x-bind:value="selectedValue">
 					<br><br>
 				</div>
@@ -163,12 +173,14 @@ require_once __DIR__ . '/../Services/ViewLogic/itemView.php';
 					<button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400" value="ubahItem" name="ubahItem">Ubah</button>
 				</div>
 			</form>
-
-
+			
+			
+			
 			</div>
 			<!--/Dialog -->
-		</div><!-- /Overlay -->
 
+		</div><!-- /Overlay -->
+		
 	</section>
 
 
