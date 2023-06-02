@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php 
-require_once __DIR__ . '/../Services/ViewLogic/jasaService.php';
+require_once __DIR__ . '/../Services/ViewLogic/jasaView.php';
 ?>
 <html lang="en">
 <head>

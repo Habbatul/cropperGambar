@@ -15,21 +15,25 @@
 <body>
   <h1>Cropping Gambar dengan Cropper.js</h1>
   
-  <form id="uploadForm" enctype="multipart/form-data">
+  <form id="uploadForm" enctype="multipart/form-data" action="proses.php" method="POST">
     <div class="cropper-container">
       <img id="image">
       <canvas id="croppedCanvas"></canvas>
     </div>
   
     <button type="submit" name="saveButton">Simpan</button>
+    <input type="hidden" id="croppedImageData" name="croppedImageData">
     <input type="file" id="imageInput" name="imageInput" accept="image/*" onchange="loadImage(event)">
+
+    <input type="text" name="pesan">
   </form>
   
   <script src="src/cropper.js"></script>
   <script>
+    //butuh form id=uploadForm, input : {hidden id=croppedImageData, file id=imageInput} 
     var image = document.getElementById('image');
     var cropper;
-    var formData = new FormData();
+    var croppedImageDataInput = document.getElementById('croppedImageData');
     
     function loadImage(event) {
       var input = event.target;
@@ -56,33 +60,17 @@
     }
     
     var uploadForm = document.getElementById('uploadForm');
-uploadForm.addEventListener('submit', function(event) {
-  event.preventDefault(); // Mencegah aksi default form submit
+    uploadForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Mencegah aksi default form submit
 
-  if (cropper) {
-    var canvas = cropper.getCroppedCanvas();
-    canvas.toBlob(function(blob) {
-      var formData = new FormData(uploadForm);
-      formData.append('croppedImageData', canvas.toDataURL('image/jpeg'));
+      if (cropper) {
+        var canvas = cropper.getCroppedCanvas();
+        var croppedImageData = canvas.toDataURL('image/jpeg');
+        croppedImageDataInput.value = croppedImageData;
 
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            // Berhasil mengupload gambar yang telah dicrop
-            alert('Gambar berhasil diunggah dan disimpan (termasuk hasil cropping).');
-          } else {
-            // Gagal mengupload gambar yang telah dicrop
-            alert('Gagal mengupload gambar yang telah dicrop.');
-          }
-        }
-      };
-
-      xhr.open('POST', 'proses.php', true);
-      xhr.send(formData);
-    }, 'image/jpeg');
-  }
-});
+        uploadForm.submit();
+      }
+    });
   </script>
 </body>
 </html>
