@@ -1,0 +1,19 @@
+Options -Indexes
+
+RewriteEngine On 
+
+#arahkan link
+RewriteRule ^itemService$ Services/ViewLogic/itemService [L]
+RewriteRule ^jasaService$ Services/ViewLogic/jasaService [L] 
+
+RewriteRule ^$ View/index.php [L]
+#RewriteRule ^((?!View/).*)$ View/$1 [L,NC]
+#arahkan root ke View, bila akses ke node_modules(src asset) dan 
+#Services maka akses dari luar View astau dari root
+RewriteRule ^((?!View/|node_modules/|itemGambar/|Services/).*)$ View/$1 [L,NC]
+
+
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
