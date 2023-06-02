@@ -1,2 +1,1 @@
-# back end logic
-php clean code
+##Cropper JS experimental
